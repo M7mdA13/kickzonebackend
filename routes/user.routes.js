@@ -1,12 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-// const userController = require('../controllers/user.controller'); /// FILE NAMES/PATHS TO BE CHANGED ACCORDINGLY
-const checkLoginAuth = require('../middleware/check-login-auth');
 
-/// FILE NAMES/PATHS TO BE CHANGED ACCORDINGLY
-// router.get('/', checkLoginAuth, userController.getAllUsers); 
-// router.get('/:id', checkLoginAuth, userController.getOneUser);
-// router.patch('/:id', checkLoginAuth, userController.updateUser);
-// router.delete('/:id', checkLoginAuth, userController.deleteUser);
+const checkLoginAuth = require("../middleware/check-login-auth");
+const checkRoleAuth = require("../middleware/check-role-auth");
+const userController = require("../controllers/userController");
+
+// ✅ Only admin can view all users
+router.get(
+  "/",
+  checkLoginAuth,
+  checkRoleAuth(["admin"]),
+  userController.getAllUsers
+);
+
+// ✅ Admin and user can view their own profile
+router.get(
+  "/me",
+  checkLoginAuth,
+  checkRoleAuth(["admin", "user"]),
+  userController.getMyProfile
+);
 
 module.exports = router;
