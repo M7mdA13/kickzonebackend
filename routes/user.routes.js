@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-// const userController = require('../controllers/user.controller'); /// FILE NAMES/PATHS TO BE CHANGED ACCORDINGLY
 const checkLoginAuth = require('../middleware/check-login-auth');
+const getAllUsers = require('../controllers/user/getall');
+const getUserById = require('../controllers/user/getone');
+const updateUser = require('../controllers/user/update');
+const deleteUser = require('../controllers/user/delete');
 
-/// FILE NAMES/PATHS TO BE CHANGED ACCORDINGLY
-// router.get('/', checkLoginAuth, userController.getAllUsers); 
-// router.get('/:id', checkLoginAuth, userController.getOneUser);
-// router.patch('/:id', checkLoginAuth, userController.updateUser);
-// router.delete('/:id', checkLoginAuth, userController.deleteUser);
+router.get('/', checkLoginAuth, getAllUsers);
+router.get('/:id', checkLoginAuth, getUserById);
+router.patch('/:id', checkLoginAuth, updateUser);
+router.delete('/:id', checkLoginAuth, deleteUser);
 
 module.exports = router;
