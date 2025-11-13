@@ -4,20 +4,24 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: true,
+      trim: true,
     },
     lastName: {
       type: String,
-      required: true,
+      trim: true,
     },
     email: {
       type: String,
-      required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
-      required: true,
+      select: false,
+    },
+    birthday: {
+      type: Date,
     },
     role: {
       type: String,
@@ -25,12 +29,10 @@ const userSchema = new mongoose.Schema(
     },
     favouritePosition: {
       type: String,
-      enum: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'],
-      default: null, 
+      default: null,
     },
     preferredFoot: {
       type: String,
-      enum: ["Left", "Right", "Both"], 
       default: null,
     },
     matchesPlayed: {
@@ -39,14 +41,24 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80', 
+      default:
+        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80",
     },
     coverPhoto: {
       type: String,
-      default: 'https://tokystorage.s3.amazonaws.com/images/default-cover.png', 
+      default:
+        "https://tokystorage.s3.amazonaws.com/images/default-cover.png",
     },
   },
   { timestamps: true }
 );
+
+userSchema.set("toJSON", {
+  transform: function (doc, ret) {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+  },
+});
 
 module.exports = mongoose.model("User", userSchema);

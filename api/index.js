@@ -1,35 +1,37 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const v1Router = require('../routes/routes');
-
+const dotenv = require("dotenv");
+const v1Router = require("./routes/routes"); 
 const app = express();
 
-require("dotenv").config();
+dotenv.config();
 
-//console.log(process.env.PORT);
 
-const port = process.env.PORT || 7000;
+const PORT = process.env.PORT || 7000;
+const DB_URL = process.env.DB_URL || process.env.DB_url; 
 
-const DB_url = process.env.DB_url;
 
 mongoose
-  .connect(DB_url)
-  .then(() => {
-    console.log("Connected to the database");
+  .connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((error) => {
-    console.error(`Database connection error: ${error.message}`);
-  });
+  .then(() => console.log(" Connected to MongoDB"))
+  .catch((error) => console.error(" Database connection error:", error.message));
+
 
 app.use(express.json());
-app.use('/api/v1', v1Router);
+
+
+app.use("/api/v1", v1Router);
+
 
 app.use((req, res) => {
-  res.status(404).json({ message: "wrong routing", data: null });
+  res.status(404).json({ message: "Route not found", data: null });
 });
 
-app.listen(port, (err) => {
-  console.log(`Server running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(` Server running on port ${PORT}`);
 });
 
 module.exports = app;
