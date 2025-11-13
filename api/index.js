@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const app = express();
-
+const StadiumRoutes=require("../routes/stadium");
 require("dotenv").config();
 
 //console.log(process.env.PORT);
@@ -21,7 +21,7 @@ mongoose
   });
 
 app.use(express.json());
-
+app.use("/api/stadiums",StadiumRoutes);
 app.use((req, res) => {
   res.status(404).json({ message: "wrong routing", data: null });
 });
