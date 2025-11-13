@@ -1,23 +1,30 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   try {
-    // 1. Get token from the 'Authorization' header
-    const token = req.headers.authorization.split(' ')[1];
+    // 1️⃣ التحقق من وجود الهيدر
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No token provided!" });
+    }
 
-    // 2. Verify the token using your secret key
+    // 2️⃣ استخراج التوكن
+    const token = authHeader.split(" ")[1];
+
+    // 3️⃣ التحقق من التوكن باستخدام المفتاح السري
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 3. Add the decoded token's data to the request object
-    req.userData = { 
-      userId: decodedToken.userId, 
-      role: decodedToken.role 
+    // 4️⃣ حفظ بيانات المستخدم في الطلب (للاستخدام لاحقًا)
+    req.userData = {
+      userId: decodedToken.userId,
+      role: decodedToken.role,
     };
 
-    // 4. If successful, call 'next()' to proceed
+    // 5️⃣ السماح بالمتابعة
     next();
 
   } catch (error) {
-    res.status(401).json({ message: 'Authentication failed!' });
+    console.error("JWT Auth Error:", error.message);
+    res.status(401).json({ message: "Authentication failed!" });
   }
 };
