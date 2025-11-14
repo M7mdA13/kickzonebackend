@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const v1Router = require("../routes/routes"); 
+const cors = require("cors");
 const app = express();
 
 dotenv.config();
@@ -21,7 +22,7 @@ mongoose
 
 
 app.use(express.json());
-
+app.use(cors());
 
 app.use("/api/v1", v1Router);
 
