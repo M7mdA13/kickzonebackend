@@ -1,4 +1,4 @@
-const User = require("../model/user");
+const User = require("../model/user"); // Using your file path
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -14,6 +14,7 @@ exports.signup = async (req, res) => {
       preferredFoot,
       profilePicture,
       coverPhoto,
+      birthday, 
     } = req.body;
 
     // 2. Check if user exists
@@ -37,6 +38,7 @@ exports.signup = async (req, res) => {
       preferredFoot,
       profilePicture,
       coverPhoto,
+      birthday, 
     });
 
     // 5. Save user
@@ -50,8 +52,9 @@ exports.signup = async (req, res) => {
     );
 
     // 7. Send response
-    const userResponse = newUser.toObject();
-    delete userResponse.password;
+    const userResponse = newUser.toObject(); 
+    delete userResponse.password; 
+    
     res.status(201).json({
       message: 'User created successfully!',
       token: token,
@@ -95,7 +98,7 @@ exports.login = async (req, res) => {
 
     // 7. Send the token and user info back (successful login)
     const userResponse = user.toObject();
-    delete userResponse.password;
+    delete userResponse.password; 
     res.status(200).json({
       message: 'Login successful!',
       token: token,
