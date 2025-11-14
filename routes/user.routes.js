@@ -1,24 +1,53 @@
 const express = require("express");
 const router = express.Router();
 
-const checkLoginAuth = require("../middleware/check-login-auth");
-const checkRoleAuth = require("../middleware/check-role-auth");
-const userController = require("../controllers/userController");
+const checkLoginAuth = require('../middleware/check-login-auth');
+const checkRoleAuth = require('../middleware/check-role-auth');
+const userController = require('../controllers/user/user.controller');
 
-// ✅ Only admin can view all users
+// ==========================
+// 🔐 Admin Only Routes
+// ==========================
 router.get(
-  "/",
+  '/',
   checkLoginAuth,
-  checkRoleAuth(["admin"]),
+  checkRoleAuth(['admin']),
   userController.getAllUsers
 );
 
-// ✅ Admin and user can view their own profile
-router.get(
-  "/me",
+router.delete(
+  '/:id',
   checkLoginAuth,
-  checkRoleAuth(["admin", "user"]),
-  userController.getMyProfile
+  checkRoleAuth(['admin']),
+  userController.deleteUser
+);
+
+// ==========================
+// 👤 Logged-in User Routes
+// ==========================
+
+// User updates their own profile
+router.patch(
+  '/me',
+  checkLoginAuth,
+  checkRoleAuth(['admin', 'user']),
+  userController.updateMe
+);
+
+// Admin or User can get a user profile by ID
+router.get(
+  '/:id',
+  checkLoginAuth,
+  checkRoleAuth(['admin', 'user']),
+  userController.getOneUser
+);
+
+// Admin or user can update a user by ID
+router.patch(
+  '/:id',
+  checkLoginAuth,
+  checkRoleAuth(['admin', 'user']),
+  userController.updateUser
 );
 
 module.exports = router;
