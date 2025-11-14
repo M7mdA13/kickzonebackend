@@ -4,7 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 const v1Router = require("../routes/routes");
-const StadiumRoutes = require("../routes/stadium");
+const StadiumRoutes = require("../routes/stadium.routes");
 
 dotenv.config();
 
@@ -26,8 +26,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/stadiums", StadiumRoutes);  // Haneen's route
-app.use("/api/v1", v1Router);         // master route
+app.use("/stadiums", StadiumRoutes); // Haneen's route
+app.use("/api/v1", v1Router); // master route
 
 // 404 handler
 app.use((req, res) => {
@@ -36,7 +36,7 @@ app.use((req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+  console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;
