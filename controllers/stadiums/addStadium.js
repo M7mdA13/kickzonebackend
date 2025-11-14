@@ -1,10 +1,17 @@
 const Stadium = require("../../model/stadiums");
 
 const addStadium = async (req, res) => {
-  const { name, location, rating, price, description, image, availableHours } =
+  const { name, location, rating, price, description, image, capacity } =
     req.body;
 
-  if (!name || !location || !price) {
+  if (
+    !name ||
+    !location ||
+    !price ||
+    !description ||
+    !image ||
+    !capacity
+  ) {
     return res
       .status(400)
       .json({ message: "Please fill all required fields." });
@@ -25,7 +32,7 @@ const addStadium = async (req, res) => {
     price,
     description,
     image,
-    availableHours,
+    capacity,
   });
 
   await newStadium.save();
